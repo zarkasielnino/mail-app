@@ -41,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/surat-masuk', [AdminController::class, 'suratmasuk'])->name('admin.surat-masuk');
     Route::get('admin/surat-keluar', [AdminController::class, 'suratkeluar'])->name('admin.surat-keluar');
     Route::get('admin/arsip', [AdminController::class, 'arsip'])->name('admin.arsip');
+    Route::get('admin/disposisi', [AdminController::class, 'disposisi'])->name('admin.disposisi');
+    Route::get('admin/manage', [AdminController::class, 'manage'])->name('admin.manage');
     Route::get('admin/template', [AdminController::class, 'template'])->name('admin.template');
     Route::get('admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::get('admin/pengaturan', [AdminController::class, 'pengaturan'])->name('admin.pengaturan');

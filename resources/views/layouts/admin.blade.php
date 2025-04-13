@@ -91,11 +91,15 @@
                     <a href="{{ route('admin.surat-keluar') }}" class="nav-link {{ Request::routeIs('admin.surat-keluar*') ? 'active' : '' }}">
                         <i class="fas fa-paper-plane"></i> Surat Keluar
                     </a>
-                    
+                    <a href="{{ route('admin.disposisi') }}" class="nav-link {{ Request::routeIs('admin.disposisi*') ? 'active' : '' }}">
+                        <i class="fas fa-paper-plane"></i> Disposisi
+                    </a>
                     <a href="{{ route('admin.arsip') }}" class="nav-link {{ Request::routeIs('admin.arsip*') ? 'active' : '' }}">
                         <i class="fas fa-archive"></i> Arsip Surat
                     </a>
-                    
+                    <a href="{{ route('admin.manage') }}" class="nav-link {{ Request::routeIs('admin.manage*') ? 'active' : '' }}">
+                        <i class="fas fa-archive"></i> Manajemen Anggota
+                    </a>
                     <a href="{{ route('admin.template') }}" class="nav-link {{ Request::routeIs('admin.template*') ? 'active' : '' }}">
                         <i class="fas fa-file-alt"></i> Template Surat
                     </a>

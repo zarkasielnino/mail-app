@@ -49,6 +49,7 @@
                             <option value="kemahasiswaan">Bagian Kemahasiswaan</option>
                             <option value="jurusan">Jurusan</option>
                             <option value="perpustakaan">Perpustakaan</option>
+                            <option value="admin">Admin</option>
                             <option value="lainnya">Lainnya</option>
                         </select>
                     </div>

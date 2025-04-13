@@ -1,21 +1,21 @@
-<!-- resources/views/admin/surat-masuk.blade.php -->
+<!-- resources/views/admin/surat-keluar.blade.php -->
 @extends('layouts.admin')
 
-@section('title', 'Surat Masuk')
+@section('title', 'Surat Keluar')
 
-@section('page-title', 'Manajemen Surat Masuk')
+@section('page-title', 'Manajemen Surat Keluar')
 
 @section('content')
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Daftar Surat Masuk</h1>
+        <h1 class="h3 mb-0 text-gray-800">Daftar Surat Keluar</h1>
         <div>
-            <a href="{{ route('admin.surat-masuk.export') }}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">
+            <a href="{{ route('admin.surat-keluar.export') }}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">
                 <i class="fas fa-file-excel fa-sm"></i> Export Excel
             </a>
-            <a href="{{ route('admin.surat-masuk.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-plus fa-sm"></i> Tambah Surat Masuk
+            <a href="{{ route('admin.surat-keluar.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fas fa-plus fa-sm"></i> Buat Surat Keluar
             </a>
         </div>
     </div>
@@ -23,10 +23,10 @@
     <!-- Filters -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Filter Surat Masuk</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Filter Surat Keluar</h6>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.surat-masuk') }}" method="GET" class="row g-3">
+            <form action="{{ route('admin.surat-keluar') }}" method="GET" class="row g-3">
                 <div class="col-md-3">
                     <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
                     <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
@@ -39,9 +39,9 @@
                     <label for="status" class="form-label">Status</label>
                     <select class="form-select" id="status" name="status">
                         <option value="">Semua Status</option>
-                        <option value="baru" {{ request('status') == 'baru' ? 'selected' : '' }}>Baru</option>
-                        <option value="diproses" {{ request('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
-                        <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                        <option value="ditandatangani" {{ request('status') == 'ditandatangani' ? 'selected' : '' }}>Ditandatangani</option>
+                        <option value="dikirim" {{ request('status') == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-12 mt-3">
                     <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ route('admin.surat-masuk') }}" class="btn btn-secondary">Reset</a>
+                    <a href="{{ route('admin.surat-keluar') }}" class="btn btn-secondary">Reset</a>
                 </div>
             </form>
         </div>
@@ -74,41 +74,41 @@
                             <th>No</th>
                             <th>No. Surat</th>
                             <th>Tanggal Surat</th>
-                            <th>Pengirim</th>
+                            <th>Tujuan</th>
                             <th>Perihal</th>
                             <th>Status</th>
-                            <th>Tanggal Diterima</th>
+                            <th>Ditandatangani</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($suratMasuk ?? [] as $index => $surat)
+                        @forelse($suratKeluar ?? [] as $index => $surat)
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $surat->nomor_surat }}</td>
                             <td>{{ $surat->tanggal_surat }}</td>
-                            <td>{{ $surat->pengirim }}</td>
+                            <td>{{ $surat->tujuan }}</td>
                             <td>{{ $surat->perihal }}</td>
                             <td>
-                                @if($surat->status == 'baru')
-                                <span class="badge bg-primary">Baru</span>
-                                @elseif($surat->status == 'diproses')
-                                <span class="badge bg-warning">Diproses</span>
-                                @elseif($surat->status == 'selesai')
-                                <span class="badge bg-success">Selesai</span>
+                                @if($surat->status == 'draft')
+                                <span class="badge bg-secondary">Draft</span>
+                                @elseif($surat->status == 'ditandatangani')
+                                <span class="badge bg-info">Ditandatangani</span>
+                                @elseif($surat->status == 'dikirim')
+                                <span class="badge bg-success">Dikirim</span>
                                 @endif
                             </td>
-                            <td>{{ $surat->tanggal_diterima }}</td>
+                            <td>{{ $surat->tanggal_ditandatangani ?? '-' }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.surat-masuk.show', $surat->id) }}" class="btn btn-sm btn-info">
+                                    <a href="{{ route('admin.surat-keluar.show', $surat->id) }}" class="btn btn-sm btn-info">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('admin.surat-masuk.edit', $surat->id) }}" class="btn btn-sm btn-warning">
+                                    <a href="{{ route('admin.surat-keluar.edit', $surat->id) }}" class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="{{ route('admin.disposisi.create', ['surat_id' => $surat->id]) }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-share"></i>
+                                    <a href="{{ route('admin.surat-keluar.download', $surat->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-download"></i>
                                     </a>
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $surat->id }}">
                                         <i class="fas fa-trash"></i>
@@ -124,11 +124,11 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                Apakah Anda yakin ingin menghapus surat masuk dengan nomor <strong>{{ $surat->nomor_surat }}</strong>?
+                                                Apakah Anda yakin ingin menghapus surat keluar dengan nomor <strong>{{ $surat->nomor_surat }}</strong>?
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                <form action="{{ route('admin.surat-masuk.destroy', $surat->id) }}" method="POST">
+                                                <form action="{{ route('admin.surat-keluar.destroy', $surat->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Hapus</button>
@@ -141,7 +141,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center">Tidak ada data surat masuk</td>
+                            <td colspan="8" class="text-center">Tidak ada data surat keluar</td>
                         </tr>
                         @endforelse
                     </tbody>

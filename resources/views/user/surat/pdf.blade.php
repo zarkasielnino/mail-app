@@ -115,8 +115,7 @@
                 <!-- <img src="path_to_stamp" alt="Digital Stamp"> -->
             </div>
             @endif
-            <p><strong>{{ $surat->user->name ?? auth()->user()->name }}</strong><br>
-            {{ $surat->user->nim ?? 'NIM/ID User' }}</p>
+            <p><strong>{{ $surat->user->name ?? auth()->user()->name }}</strong><br></p>
         </div>
         <div class="clearfix"></div>
     </div>

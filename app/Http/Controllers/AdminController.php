@@ -22,6 +22,14 @@ class AdminController extends Controller
     {
         return view('admin.arsip'); // Buat file resources/views/admin/dashboard.blade.php
     }
+    public function manage()
+    {
+        return view('admin.manage'); // Buat file resources/views/admin/dashboard.blade.php
+    }
+    public function disposisi()
+    {
+        return view('admin.disposisi'); // Buat file resources/views/admin/dashboard.blade.php
+    }
     public function template()
     {
         return view('admin.template'); // Buat file resources/views/admin/dashboard.blade.php
