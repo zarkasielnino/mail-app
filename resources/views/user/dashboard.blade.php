@@ -39,7 +39,7 @@
                     </div>
                     <i class="fas fa-paper-plane fa-3x"></i>
                 </div>
-                <a href="{{ route('user.surat-keluar') }}" class="btn btn-outline-light mt-3">Lihat Semua</a>
+                <a href="{{ route('user.surat.index') }}" class="btn btn-outline-light mt-3">Lihat Semua</a>
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
                     </div>
                     <i class="fas fa-clock fa-3x"></i>
                 </div>
-                <a href="{{ route('user.surat-keluar', ['status' => 'pending']) }}" class="btn btn-outline-light mt-3">Lihat Semua</a>
+                <a href="{{ route('user.surat.index', ['status' => 'pending']) }}" class="btn btn-outline-light mt-3">Lihat Semua</a>
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\User\SuratController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,11 +23,18 @@ Route::middleware(['auth'])->group(function () {
     // General user routes
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
     Route::get('/surat-masuk', [UserController::class, 'suratMasuk'])->name('user.surat-masuk');
-    Route::get('/surat-keluar', [UserController::class, 'suratKeluar'])->name('user.surat-keluar');
+    Route::get('/user/surat-keluar', [App\Http\Controllers\User\SuratController::class, 'index'])->name('user.surat.index');
     Route::get('/buat-surat', [UserController::class, 'buatSurat'])->name('user.buat-surat');
     Route::get('/arsip', [UserController::class, 'arsip'])->name('user.arsip');
     Route::get('/profil', [UserController::class, 'profil'])->name('user.profil');
-
+    Route::prefix('user')->name('user.')->middleware('auth')->group(function () {
+        Route::resource('surat', \App\Http\Controllers\User\SuratController::class);
+    });
+    Route::get('/surat/{id}', [SuratController::class,'show'])->name('user.surat.show');
+    Route::get('/surat/{id}/edit', [SuratController::class,'edit'])->name('user.surat.edit');
+    Route::put('/surat/{id}', [SuratController::class,'update'])->name('user.surat.update');
+    Route::get('/surat/{id}/download', [SuratController::class,'update'])->name('user.surat.pdf');
+    
     // Admin routes (only accessible by admin users)
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', [UserController::class, 'adminDashboard'])->name('admin.dashboard');

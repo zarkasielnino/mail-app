@@ -2,136 +2,177 @@
 
 @section('title', 'Arsip Surat')
 
-@section('content')
-<div class="card">
-    <div class="card-header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Arsip Surat</h5>
-            <div>
-                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#filterModal">
-                    <i class="fas fa-filter"></i> Filter
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Cari arsip surat..." aria-label="Cari">
-                    <button class="btn btn-outline-secondary" type="button"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-            <div class="col-md-6 text-end">
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-outline-primary active">Semua</button>
-                    <button type="button" class="btn btn-outline-primary">Surat Masuk</button>
-                    <button type="button" class="btn btn-outline-primary">Surat Keluar</button>
-                </div>
-            </div>
-        </div>
+@section('css')
+<style>
+    .card {
+        transition: transform 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .search-container {
+        margin-bottom: 20px;
+    }
+    .filter-section {
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .badge-category {
+        font-size: 0.8rem;
+    }
+    .table-responsive {
+        border-radius: 5px;
+    }
+    .table th {
+        background-color: #f1f1f1;
+    }
+    .pagination {
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .btn-action {
+        margin-right: 5px;
+    }
+</style>
+@endsection
 
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nomor Surat</th>
-                        <th>Jenis</th>
-                        <th>Perihal</th>
-                        <th>Pengirim/Tujuan</th>
-                        <th>Tanggal</th>
-                        <th>Kategori</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>SM/2024/050</td>
-                        <td>Surat Masuk</td>
-                        <td>Undangan Workshop</td>
-                        <td>Fakultas Ilmu Komputer</td>
-                        <td>15 Des 2024</td>
-                        <td><span class="badge bg-info">Akademik</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>SK/2024/045</td>
-                        <td>Surat Keluar</td>
-                        <td>Permohonan Izin Penelitian</td>
-                        <td>Fakultas Teknik</td>
-                        <td>10 Des 2024</td>
-                        <td><span class="badge bg-primary">Penelitian</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>SM/2024/042</td>
-                        <td>Surat Masuk</td>
-                        <td>Pemberitahuan Kegiatan</td>
-                        <td>Rektorat</td>
-                        <td>05 Des 2024</td>
-                        <td><span class="badge bg-success">Kegiatan</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>SK/2024/038</td>
-                        <td>Surat Keluar</td>
-                        <td>Permohonan Beasiswa</td>
-                        <td>Bagian Kemahasiswaan</td>
-                        <td>28 Nov 2024</td>
-                        <td><span class="badge bg-warning">Beasiswa</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>SM/2024/035</td>
-                        <td>Surat Masuk</td>
-                        <td>Undangan Seminar</td>
-                        <td>Fakultas Ekonomi</td>
-                        <td>20 Nov 2024</td>
-                        <td><span class="badge bg-info">Akademik</span></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <div>
-                Menampilkan 1-5 dari 25 arsip
+@section('content')
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Arsip Surat</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
             </div>
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Sebelumnya</a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Selanjutnya</a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="card-body">
+                <!-- Search Form -->
+                <div class="search-container">
+                    <form action="{{ route('user.arsip') }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Cari nomor surat, perihal, atau pengirim..." name="search" value="{{ request('search') }}">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i> Cari
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Filter Tags (when filters are applied) -->
+                @if(request()->has('jenis') || request()->has('tanggal_mulai') || request()->has('tanggal_akhir'))
+                <div class="filter-section">
+                    <div class="d-flex align-items-center flex-wrap">
+                        <span class="me-2"><i class="fas fa-filter"></i> Filter aktif:</span>
+                        @if(request('jenis'))
+                            <span class="badge bg-info me-2 mb-1">Jenis: {{ request('jenis') }}</span>
+                        @endif
+                        @if(request('tanggal_mulai'))
+                            <span class="badge bg-info me-2 mb-1">Dari: {{ request('tanggal_mulai') }}</span>
+                        @endif
+                        @if(request('tanggal_akhir'))
+                            <span class="badge bg-info me-2 mb-1">Sampai: {{ request('tanggal_akhir') }}</span>
+                        @endif
+                        <a href="{{ route('user.arsip') }}" class="btn btn-sm btn-outline-danger mb-1">
+                            <i class="fas fa-times"></i> Hapus Filter
+                        </a>
+                    </div>
+                </div>
+                @endif
+
+                <!-- Table Content -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="5%">No.</th>
+                                <th width="15%">Nomor Surat</th>
+                                <th width="15%">Tanggal</th>
+                                <th width="20%">Perihal</th>
+                                <th width="15%">Jenis</th>
+                                <th width="15%">Pengirim/Tujuan</th>
+                                <th width="15%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($arsip ?? [] as $index => $surat)
+                            <tr>
+                                <td>{{ $index + $arsip->firstItem() }}</td>
+                                <td>{{ $surat->nomor_surat }}</td>
+                                <td>{{ \Carbon\Carbon::parse($surat->tanggal)->format('d-m-Y') }}</td>
+                                <td>{{ $surat->perihal }}</td>
+                                <td>
+                                    @if($surat->jenis == 'masuk')
+                                        <span class="badge bg-primary">Surat Masuk</span>
+                                    @else
+                                        <span class="badge bg-success">Surat Keluar</span>
+                                    @endif
+                                </td>
+                                <td>{{ $surat->jenis == 'masuk' ? $surat->pengirim : $surat->tujuan }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ route('user.arsip.detail', $surat->id) }}" class="btn btn-sm btn-info btn-action">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('user.arsip.download', $surat->id) }}" class="btn btn-sm btn-success btn-action">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-danger btn-action" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $surat->id }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
+                                    <!-- Delete Modal -->
+                                    <div class="modal fade" id="deleteModal{{ $surat->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Apakah Anda yakin ingin menghapus arsip surat <strong>{{ $surat->perihal }}</strong> dari sistem?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                    <form action="{{ route('user.arsip.delete', $surat->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger">Hapus</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-4">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <i class="fas fa-archive fa-3x text-secondary mb-3"></i>
+                                        <h5>Tidak ada arsip surat ditemukan</h5>
+                                        <p class="text-muted">Belum ada surat yang diarsipkan atau tidak ada surat yang sesuai dengan filter yang diterapkan.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                @if(isset($arsip) && $arsip->hasPages())
+                <div>
+                    {{ $arsip->appends(request()->query())->links() }}
+                </div>
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -141,23 +182,53 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="filterModalLabel">Filter Arsip</h5>
+                <h5 class="modal-title" id="filterModalLabel">Filter Arsip Surat</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form>
+            <form action="{{ route('user.arsip') }}" method="GET">
+                <div class="modal-body">
                     <div class="mb-3">
-                        <label for="filter-jenis" class="form-label">Jenis Surat</label>
-                        <select class="form-select" id="filter-jenis">
-                            <option value="">Semua</option>
-                            <option value="masuk">Surat Masuk</option>
-                            <option value="keluar">Surat Keluar</option>
+                        <label for="jenis" class="form-label">Jenis Surat</label>
+                        <select class="form-select" id="jenis" name="jenis">
+                            <option value="">Semua Jenis</option>
+                            <option value="masuk" {{ request('jenis') == 'masuk' ? 'selected' : '' }}>Surat Masuk</option>
+                            <option value="keluar" {{ request('jenis') == 'keluar' ? 'selected' : '' }}>Surat Keluar</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="filter-kategori" class="form-label">Kategori</label>
-                        <select class="form-select" id="filter-kategori">
-                            <option value="">Semua Kategori</option>
-                            <option value="akademik">Akademik</option>
-                            <option value="penelitian">Penelitian</option>
-                            <option value="kegiatan
+                        <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
+                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal_akhir" class="form-label">Tanggal Akhir</label>
+                        <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}">
+                    </div>
+                    <!-- Add more filter options as needed -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Terapkan Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+        
+        // Handle filter reset
+        $('#resetFilter').on('click', function(e) {
+            e.preventDefault();
+            window.location.href = '{{ route("user.arsip") }}';
+        });
+    });
+</script>
+@endsection

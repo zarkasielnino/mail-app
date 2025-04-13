@@ -35,7 +35,7 @@
                 <button class="nav-link" id="ditolak-tab" data-bs-toggle="tab" data-bs-target="#ditolak" type="button" role="tab" aria-controls="ditolak" aria-selected="false">Ditolak</button>
             </li>
         </ul>
-        
+
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="semua" role="tabpanel" aria-labelledby="semua-tab">
                 <div class="table-responsive">
@@ -52,48 +52,49 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse ($semua as $surat)
                             <tr>
-                                <td>1</td>
-                                <td>SK/2025/001</td>
-                                <td>Permohonan Magang</td>
-                                <td>Fakultas Ilmu Komputer</td>
-                                <td>04 Apr 2025</td>
-                                <td><span class="badge bg-warning">Diproses</span></td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $surat->nomor_surat ?? '-' }}</td>
+                                <td>{{ $surat->perihal }}</td>
+                                <td>{{ $surat->tujuan }}</td>
+                                <td>{{ $surat->created_at->format('d M Y') }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                    @if($surat->status == 'draft')
+                                    <span class="badge bg-secondary">Draft</span>
+                                    @elseif($surat->status == 'diajukan')
+                                    <span class="badge bg-warning">Diproses</span>
+                                    @elseif($surat->status == 'disetujui')
+                                    <span class="badge bg-success">Disetujui</span>
+                                    @elseif($surat->status == 'ditolak')
+                                    <span class="badge bg-danger">Ditolak</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('user.surat.show', $surat->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                    @if($surat->status !== 'draft')
+                                    <a href="{{ route('user.surat.pdf', $surat->id) }}" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
+                                    @endif
+                                    <form action="{{ route('user.surat.destroy', $surat->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Yakin ingin menghapus surat ini?')" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td>2</td>
-                                <td>SK/2025/002</td>
-                                <td>Undangan Rapat Organisasi</td>
-                                <td>Ketua Jurusan</td>
-                                <td>01 Apr 2025</td>
-                                <td><span class="badge bg-success">Disetujui</span></td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                                </td>
+                                <td colspan="7" class="text-center">Tidak ada data surat.</td>
                             </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>-</td>
-                                <td>Permohonan Beasiswa</td>
-                                <td>Bagian Kemahasiswaan</td>
-                                <td>29 Mar 2025</td>
-                                <td><span class="badge bg-secondary">Draft</span></td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
-                                </td>
-                            </tr>
+                            @endforelse
                         </tbody>
+
                     </table>
                 </div>
             </div>
-            
+
             <div class="tab-pane fade" id="draft" role="tabpanel" aria-labelledby="draft-tab">
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -107,21 +108,49 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse ($draft as $surat)
                             <tr>
-                                <td>1</td>
-                                <td>Permohonan Beasiswa</td>
-                                <td>Bagian Kemahasiswaan</td>
-                                <td>29 Mar 2025</td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $surat->nomor_surat ?? '-' }}</td>
+                                <td>{{ $surat->perihal }}</td>
+                                <td>{{ $surat->tujuan }}</td>
+                                <td>{{ $surat->created_at->format('d M Y') }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                    @if($surat->status == 'draft')
+                                    <span class="badge bg-secondary">Draft</span>
+                                    @elseif($surat->status == 'diajukan')
+                                    <span class="badge bg-warning">Diproses</span>
+                                    @elseif($surat->status == 'disetujui')
+                                    <span class="badge bg-success">Disetujui</span>
+                                    @elseif($surat->status == 'ditolak')
+                                    <span class="badge bg-danger">Ditolak</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('user.surat.edit', $surat->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ route('user.surat.show', $surat->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                    @if($surat->status !== 'draft')
+                                    <a href="{{ route('user.surat.pdf', $surat->id) }}" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
+                                    @endif
+                                    <form action="{{ route('user.surat.destroy', $surat->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Yakin ingin menghapus surat ini?')" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Tidak ada data surat.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-            
+
             <div class="tab-pane fade" id="diproses" role="tabpanel" aria-labelledby="diproses-tab">
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -136,23 +165,48 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse ($diproses as $surat)
                             <tr>
-                                <td>1</td>
-                                <td>SK/2025/001</td>
-                                <td>Permohonan Magang</td>
-                                <td>Fakultas Ilmu Komputer</td>
-                                <td>04 Apr 2025</td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $surat->nomor_surat ?? '-' }}</td>
+                                <td>{{ $surat->perihal }}</td>
+                                <td>{{ $surat->tujuan }}</td>
+                                <td>{{ $surat->created_at->format('d M Y') }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                    @if($surat->status == 'draft')
+                                    <span class="badge bg-secondary">Draft</span>
+                                    @elseif($surat->status == 'diajukan')
+                                    <span class="badge bg-warning">Diproses</span>
+                                    @elseif($surat->status == 'disetujui')
+                                    <span class="badge bg-success">Disetujui</span>
+                                    @elseif($surat->status == 'ditolak')
+                                    <span class="badge bg-danger">Ditolak</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('user.surat.show', $surat->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                    @if($surat->status !== 'draft')
+                                    <a href="{{ route('user.surat.pdf', $surat->id) }}" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
+                                    @endif
+                                    <form action="{{ route('user.surat.destroy', $surat->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Yakin ingin menghapus surat ini?')" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Tidak ada data surat.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-            
+
             <div class="tab-pane fade" id="disetujui" role="tabpanel" aria-labelledby="disetujui-tab">
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -167,29 +221,105 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse ($disetujui as $surat)
                             <tr>
-                                <td>1</td>
-                                <td>SK/2025/002</td>
-                                <td>Undangan Rapat Organisasi</td>
-                                <td>Ketua Jurusan</td>
-                                <td>01 Apr 2025</td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $surat->nomor_surat ?? '-' }}</td>
+                                <td>{{ $surat->perihal }}</td>
+                                <td>{{ $surat->tujuan }}</td>
+                                <td>{{ $surat->created_at->format('d M Y') }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
+                                    @if($surat->status == 'draft')
+                                    <span class="badge bg-secondary">Draft</span>
+                                    @elseif($surat->status == 'diajukan')
+                                    <span class="badge bg-warning">Diproses</span>
+                                    @elseif($surat->status == 'disetujui')
+                                    <span class="badge bg-success">Disetujui</span>
+                                    @elseif($surat->status == 'ditolak')
+                                    <span class="badge bg-danger">Ditolak</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('user.surat.show', $surat->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                    @if($surat->status !== 'draft')
+                                    <a href="{{ route('user.surat.pdf', $surat->id) }}" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
+                                    @endif
+                                    <form action="{{ route('user.surat.destroy', $surat->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Yakin ingin menghapus surat ini?')" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Tidak ada data surat.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-            
+
             <div class="tab-pane fade" id="ditolak" role="tabpanel" aria-labelledby="ditolak-tab">
                 <div class="alert alert-info">
-                    Tidak ada surat yang ditolak.
+                <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nomor Surat</th>
+                                <th>Perihal</th>
+                                <th>Tujuan</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($ditolak as $surat)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $surat->nomor_surat ?? '-' }}</td>
+                                <td>{{ $surat->perihal }}</td>
+                                <td>{{ $surat->tujuan }}</td>
+                                <td>{{ $surat->created_at->format('d M Y') }}</td>
+                                <td>
+                                    @if($surat->status == 'draft')
+                                    <span class="badge bg-secondary">Draft</span>
+                                    @elseif($surat->status == 'diajukan')
+                                    <span class="badge bg-warning">Diproses</span>
+                                    @elseif($surat->status == 'disetujui')
+                                    <span class="badge bg-success">Disetujui</span>
+                                    @elseif($surat->status == 'ditolak')
+                                    <span class="badge bg-danger">Ditolak</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('user.surat.show', $surat->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                    @if($surat->status !== 'draft')
+                                    <a href="{{ route('user.surat.pdf', $surat->id) }}" class="btn btn-sm btn-secondary"><i class="fas fa-download"></i></a>
+                                    @endif
+                                    <form action="{{ route('user.surat.destroy', $surat->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Yakin ingin menghapus surat ini?')" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Tidak ada data surat.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        
+
         <div class="d-flex justify-content-between align-items-center mt-3">
             <div>
                 Menampilkan 1-3 dari 3 surat
