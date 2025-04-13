@@ -7,6 +7,17 @@
     <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="card-title">Detail Surat</h5>
+            @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+            @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+
             <div>
                 <a href="{{ route('user.surat.index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Kembali
@@ -50,7 +61,7 @@
                     </tr>
                     <tr>
                         <th>Status</th>
-                        <td>: 
+                        <td>:
                             @if($surat->status == 'draft')
                             <span class="badge bg-secondary">Draft</span>
                             @elseif($surat->status == 'diajukan')
@@ -99,14 +110,15 @@
 
         @if($surat->status == 'draft')
         <div class="mt-4">
-            <form action="{{ route('user.surat.update', $surat->id) }}" method="POST">
+            <form action="{{ route('user.surat.ajukan', $surat->id) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="hidden" name="submit_action" value="submit">
+
                 <button type="submit" class="btn btn-primary" onclick="return confirm('Yakin ingin mengajukan surat ini? Surat yang sudah diajukan tidak dapat diedit kembali.')">
                     <i class="fas fa-paper-plane"></i> Ajukan Surat
                 </button>
             </form>
+
         </div>
         @endif
     </div>

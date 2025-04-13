@@ -9,6 +9,12 @@
             <div class="card-header">
                 <h5 class="card-title">Form Pembuatan Surat</h5>
             </div>
+            @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+
             <div class="card-body">
                 <form action="{{ route('user.surat.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -73,12 +79,15 @@
                         </select>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-secondary" id="simpanDraft">Simpan Draft</button>
+                        <!-- Tombol Simpan Draft -->
+                        <button type="submit" class="btn btn-secondary" name="draft" value="1">Simpan Draft</button>
+
                         <div>
                             <button type="button" class="btn btn-info" id="pratinjau">Pratinjau</button>
                             <button type="submit" class="btn btn-primary">Kirim Surat</button>
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -89,7 +98,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Text editor initialization - Menggunakan CKEditor
-        if(document.getElementById('isi_surat')) {
+        if (document.getElementById('isi_surat')) {
             ClassicEditor
                 .create(document.getElementById('isi_surat'))
                 .catch(error => {
@@ -100,9 +109,9 @@
         // Menampilkan form tujuan lainnya jika "Lainnya" dipilih
         const tujuanSelect = document.getElementById('tujuan');
         const tujuanLainnyaDiv = document.getElementById('tujuan_lainnya_div');
-        
+
         tujuanSelect.addEventListener('change', function() {
-            if(this.value === 'lainnya') {
+            if (this.value === 'lainnya') {
                 tujuanLainnyaDiv.style.display = 'block';
             } else {
                 tujuanLainnyaDiv.style.display = 'none';
@@ -116,13 +125,13 @@
             const perihal = document.getElementById('perihal').value;
             const tujuan = document.getElementById('tujuan').value;
             const isiSurat = document.querySelector('.ck-editor__editable').ckeditorInstance.getData();
-            
+
             // Validasi data minimal
             if (!jenisSurat || !perihal || !tujuan || !isiSurat) {
                 alert('Mohon lengkapi data surat (jenis, perihal, tujuan, dan isi) sebelum pratinjau.');
                 return;
             }
-            
+
             // Menampilkan pratinjau di modal
             const modalHtml = `
                 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
@@ -173,48 +182,64 @@
                     </div>
                 </div>
             `;
-            
+
             // Tambahkan modal ke body
             document.body.insertAdjacentHTML('beforeend', modalHtml);
-            
+
             // Tampilkan modal
             const previewModal = new bootstrap.Modal(document.getElementById('previewModal'));
             previewModal.show();
-            
+
             // Hapus modal setelah ditutup
             document.getElementById('previewModal').addEventListener('hidden.bs.modal', function() {
                 document.getElementById('previewModal').remove();
             });
         });
 
-        // Simpan Draft
         document.getElementById('simpanDraft').addEventListener('click', function() {
-            // Validasi minimal data
+            console.log('Tombol Simpan Draft Diklik');
             const perihal = document.getElementById('perihal').value;
+
             if (!perihal) {
                 alert('Minimal masukkan perihal surat untuk menyimpan draft.');
                 return;
             }
-            
-            // Simulasi penyimpanan draft dengan mengubah tombol
+
             this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
             this.disabled = true;
-            
-            // Simulasi delay
-            setTimeout(() => {
-                alert('Draft surat berhasil disimpan!');
-                this.innerHTML = 'Simpan Draft';
-                this.disabled = false;
-            }, 1500);
-        });
 
+            // Simulasi pengiriman request ke server (AJAX)
+            fetch("{{ route('user.surat.store') }}", {
+                    method: 'POST',
+                    body: new FormData(document.querySelector('form')),
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Draft surat berhasil disimpan!');
+                    } else {
+                        alert('Terjadi kesalahan.');
+                    }
+                    this.innerHTML = 'Simpan Draft';
+                    this.disabled = false;
+                })
+                .catch(error => {
+                    alert('Terjadi kesalahan.');
+                    console.log(error);
+                    this.innerHTML = 'Simpan Draft';
+                    this.disabled = false;
+                });
+        });
         // Mengisi template saat dipilih
         document.getElementById('template').addEventListener('change', function() {
             if (!this.value) return;
-            
+
             let templateContent = '';
-            
-            switch(this.value) {
+
+            switch (this.value) {
                 case 'template_1':
                     templateContent = '<p>Yang bertanda tangan di bawah ini:</p><p>Nama: [Nama Pejabat]</p><p>Jabatan: [Jabatan]</p><p>Dengan ini menerangkan bahwa:</p><p>Nama: [Nama Mahasiswa]</p><p>NIM: [NIM Mahasiswa]</p><p>Fakultas/Jurusan: [Fakultas/Jurusan]</p><p>Adalah benar mahasiswa aktif Universitas Contoh yang sedang menempuh pendidikan pada semester [Semester] tahun akademik [Tahun Akademik].</p><p>Surat keterangan ini dibuat untuk keperluan [Keperluan].</p>';
                     break;
@@ -225,9 +250,9 @@
                     templateContent = '<p>Dengan hormat,</p><p>Sehubungan dengan akan diadakannya [Nama Kegiatan], maka kami mengundang Bapak/Ibu/Saudara untuk hadir pada:</p><p>Hari/Tanggal: [Hari/Tanggal]</p><p>Waktu: [Waktu]</p><p>Tempat: [Tempat]</p><p>Acara: [Acara]</p><p>Demikian undangan ini kami sampaikan. Atas perhatian dan kehadiran Bapak/Ibu/Saudara, kami ucapkan terima kasih.</p>';
                     break;
             }
-            
+
             // Mengisi CKEditor dengan template
-            if(templateContent) {
+            if (templateContent) {
                 document.querySelector('.ck-editor__editable').ckeditorInstance.setData(templateContent);
             }
         });

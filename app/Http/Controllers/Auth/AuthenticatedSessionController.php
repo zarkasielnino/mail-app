@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
     {
         switch ($role) {
             case 'admin':
-                return route('dashboard');
+                return route('admin.dashboard');
             default:
                 return route('user.dashboard');
         }

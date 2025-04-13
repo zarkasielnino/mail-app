@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Surat;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SuratController extends Controller
 {
@@ -48,6 +49,7 @@ class SuratController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi
         $request->validate([
             'jenis_surat' => 'required',
             'prioritas' => 'required',
@@ -57,16 +59,20 @@ class SuratController extends Controller
             'isi_surat' => 'required',
             'lampiran.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:5120',
         ]);
-
+    
         $tujuanFinal = $request->tujuan === 'lainnya' ? $request->tujuan_lainnya : $request->tujuan;
-
+    
+        // Simpan surat
         $lampiranPaths = [];
         if ($request->hasFile('lampiran')) {
             foreach ($request->file('lampiran') as $file) {
                 $lampiranPaths[] = $file->store('lampiran_surat', 'public');
             }
         }
-
+    
+        // Cek apakah draft atau kirim surat
+        $status = $request->has('draft') ? 'draft' : 'diajukan';
+    
         Surat::create([
             'user_id' => auth()->id(),
             'jenis_surat' => $request->jenis_surat,
@@ -76,17 +82,26 @@ class SuratController extends Controller
             'isi_surat' => $request->isi_surat,
             'lampiran' => $lampiranPaths,
             'template' => $request->template,
+            'status' => $status, // Menambahkan status
         ]);
+    
+        // Flash session berhasil simpan draft
+        if ($status === 'draft') {
+            session()->flash('success', 'Draft surat berhasil disimpan!');
+        } else {
+            session()->flash('success', 'Surat berhasil dikirim!');
+        }
+    
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Surat berhasil dikirim.',
             ]);
         }
-
+    
         return redirect()->route('user.surat.index')->with('success', 'Surat berhasil dikirim.');
     }
-
+    
     public function show($id)
     {
         $surat = Surat::findOrFail($id);
@@ -146,6 +161,8 @@ class SuratController extends Controller
         $surat->tujuan = $request->tujuan;
         $surat->isi_surat = $request->isi_surat;
 
+
+       
         // Handle attachment if provided
         if ($request->hasFile('lampiran')) {
             // Delete the old file if exists
@@ -170,8 +187,8 @@ class SuratController extends Controller
         }
 
         $surat->save();
-
-        return redirect()->route('user.surat-keluar')
+        
+        return redirect()->route('user.surat.index')
             ->with('success', 'Surat berhasil diperbarui.');
     }
 
@@ -188,7 +205,24 @@ class SuratController extends Controller
         $surat->delete();
         return redirect()->route('user.surat.index')->with('success', 'Surat berhasil dihapus.');
     }
-
+    public function ajukan($id)
+    {
+        $surat = Surat::findOrFail($id);
+    
+        if ($surat->user_id != auth()->id()) {
+            return redirect()->route('user.surat.index')->with('error', 'Anda tidak memiliki akses.');
+        }
+    
+        if ($surat->status != 'draft') {
+            return redirect()->route('user.surat.index')->with('error', 'Hanya surat draft yang dapat diajukan.');
+        }
+    
+        $surat->status = 'diajukan';
+        $surat->save();
+    
+        return redirect()->route('user.surat.index')->with('success', 'Surat berhasil diajukan.');
+    }
+    
     private function authorizeSurat($surat)
     {
         if ($surat->user_id !== auth()->id()) {
