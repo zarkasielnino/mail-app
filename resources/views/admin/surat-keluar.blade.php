@@ -10,14 +10,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Daftar Surat Keluar</h1>
-        <div>
-            <a href="{{ route('admin.surat-keluar.export') }}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm mr-2">
-                <i class="fas fa-file-excel fa-sm"></i> Export Excel
-            </a>
-            <a href="{{ route('admin.surat-keluar.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fas fa-plus fa-sm"></i> Buat Surat Keluar
-            </a>
-        </div>
+       
     </div>
 
     <!-- Filters -->

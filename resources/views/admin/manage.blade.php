@@ -1,4 +1,3 @@
-<!-- resources/views/admin/manage.blade.php -->
 @extends('layouts.admin')
 
 @section('title', 'Manajemen Anggota')
@@ -43,17 +42,7 @@
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Opsi:</div>
-                            <a class="dropdown-item" href="{{ route('admin.manage.export') }}">
-                                <i class="fas fa-file-excel fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Export Excel
-                            </a>
-                            <a class="dropdown-item" href="{{ route('admin.manage.import') }}">
-                                <i class="fas fa-file-import fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Import Data
-                            </a>
-                        </div>
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -64,11 +53,8 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>Email</th>
-                                    <th>Peran</th>
                                     <th>Jabatan</th>
-                                    <th>Unit/Bagian</th>
                                     <th>Status</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,22 +63,21 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{ $user->role->nama }}</td>
-                                    <td>{{ $user->jabatan ?? '-' }}</td>
-                                    <td>{{ $user->unit_kerja ?? '-' }}</td>
+                                    <td>{{ $user->role ?? '-' }}</td>
                                     <td>
-                                        @if ($user->is_active)
-                                        <span class="badge bg-success">Aktif</span>
+                                        @if ($user->status === 'aktif')
+                                        <span class="badge bg-success text-white">Aktif</span>
                                         @else
-                                        <span class="badge bg-secondary">Nonaktif</span>
+                                        <span class="badge bg-secondary text-white">Nonaktif</span>
                                         @endif
                                     </td>
+
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('admin.manage.edit', $user->id) }}" class="btn btn-sm btn-warning">
+                                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}">
                                                 <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form action="{{ route('admin.manage.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                            </button>
+                                            <form action="{{ route('manage.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">
@@ -115,7 +100,7 @@
 <!-- Modal Tambah User -->
 <div class="modal fade" id="tambahUserModal" tabindex="-1" aria-labelledby="tambahUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{ route('admin.manage.store') }}" method="POST">
+        <form action="{{ route('manage.store') }}" method="POST">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -132,21 +117,13 @@
                         <input type="email" class="form-control" name="email" id="email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="role_id" class="form-label">Peran</label>
-                        <select class="form-select" name="role_id" id="role_id" required>
+                        <label for="role" class="form-label">Peran</label>
+                        <select class="form-select" name="role" id="role" required>
                             <option value="">-- Pilih Peran --</option>
                             @foreach ($roles as $role)
-                            <option value="{{ $role->id }}">{{ $role->nama }}</option>
+                            <option value="{{ $role }}">{{ ucfirst($role) }}</option>
                             @endforeach
                         </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="jabatan" class="form-label">Jabatan</label>
-                        <input type="text" class="form-control" name="jabatan" id="jabatan">
-                    </div>
-                    <div class="mb-3">
-                        <label for="unit_kerja" class="form-label">Unit/Bagian</label>
-                        <input type="text" class="form-control" name="unit_kerja" id="unit_kerja">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Kata Sandi</label>
@@ -161,4 +138,51 @@
         </form>
     </div>
 </div>
+@foreach ($users as $user)
+<!-- Modal Edit User -->
+<div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1" aria-labelledby="editUserModalLabel{{ $user->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('manage.update', $user->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel{{ $user->id }}">Edit Anggota</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name{{ $user->id }}" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" name="name" id="name{{ $user->id }}" value="{{ $user->name }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email{{ $user->id }}" class="form-label">Email Pengguna</label>
+                        <input type="email" class="form-control" name="email" id="email{{ $user->id }}" value="{{ $user->email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role{{ $user->id }}" class="form-label">Peran</label>
+                        <select class="form-select" name="role" id="role{{ $user->id }}" required>
+                            @foreach ($roles as $role)
+                            <option value="{{ $role }}" @if($user->role == $role) selected @endif>{{ ucfirst($role) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status{{ $user->id }}" class="form-label">Status</label>
+                        <select class="form-select" name="status" id="status{{ $user->id }}" required>
+                            <option value="aktif" {{ $user->status === 'aktif' ? 'selected' : '' }}>Aktif</option>
+                            <option value="nonaktif" {{ $user->status === 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Perbarui</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
 @endsection

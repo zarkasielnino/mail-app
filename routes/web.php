@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\User\SuratController;
+use App\Http\Controllers\Admin\ManageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,7 +43,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/surat-keluar', [AdminController::class, 'suratkeluar'])->name('admin.surat-keluar');
     Route::get('admin/arsip', [AdminController::class, 'arsip'])->name('admin.arsip');
     Route::get('admin/disposisi', [AdminController::class, 'disposisi'])->name('admin.disposisi');
-    Route::get('admin/manage', [AdminController::class, 'manage'])->name('admin.manage');
+    Route::get('/manage', [ManageController::class, 'index'])->name('manage.index');
+    Route::post('/manage', [ManageController::class, 'store'])->name('manage.store');
+    Route::get('/manage/{id}/edit', [ManageController::class, 'edit'])->name('manage.edit');
+    Route::put('/manage/{id}', [ManageController::class, 'update'])->name('manage.update');
+    Route::delete('/manage/{id}', [ManageController::class, 'destroy'])->name('manage.destroy');
     Route::get('admin/template', [AdminController::class, 'template'])->name('admin.template');
     Route::get('admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::get('admin/pengaturan', [AdminController::class, 'pengaturan'])->name('admin.pengaturan');

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,23 +15,23 @@
             --text-color: #333;
             --light-bg: #f5f8fa;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             color: var(--text-color);
             background-color: var(--light-bg);
         }
-        
+
         .navbar {
             background-color: #fff;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
         }
-        
+
         .navbar-brand {
             font-weight: 700;
             color: var(--primary-color);
         }
-        
+
         .hero-section {
             background: linear-gradient(135deg, var(--primary-color) 0%, #0d2456 100%);
             color: white;
@@ -38,7 +39,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .hero-section::before {
             content: "";
             position: absolute;
@@ -50,28 +51,29 @@
             opacity: 0.05;
             animation: move 30s linear infinite;
         }
-        
+
         @keyframes move {
             0% {
                 transform: translateY(0);
             }
+
             100% {
                 transform: translateY(-50px);
             }
         }
-        
+
         .hero-heading {
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
         }
-        
+
         .hero-subheading {
             font-size: 1.2rem;
             margin-bottom: 2rem;
             opacity: 0.9;
         }
-        
+
         .btn-primary {
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
@@ -80,22 +82,22 @@
             padding: 10px 24px;
             border-radius: 50px;
         }
-        
+
         .btn-primary:hover {
             background-color: #e5a400;
             border-color: #e5a400;
         }
-        
+
         .btn-outline-light {
             border-radius: 50px;
             padding: 10px 24px;
             font-weight: 600;
         }
-        
+
         .features-section {
             padding: 80px 0;
         }
-        
+
         .feature-card {
             background: white;
             border-radius: 10px;
@@ -104,12 +106,12 @@
             height: 100%;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
+
         .feature-icon {
             width: 60px;
             height: 60px;
@@ -121,19 +123,19 @@
             margin-bottom: 20px;
             color: var(--primary-color);
         }
-        
+
         .feature-title {
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 15px;
             color: var(--primary-color);
         }
-        
+
         .how-it-works {
             background-color: #fff;
             padding: 80px 0;
         }
-        
+
         .section-title {
             font-size: 2.2rem;
             font-weight: 700;
@@ -141,12 +143,12 @@
             text-align: center;
             color: var(--primary-color);
         }
-        
+
         .step-card {
             text-align: center;
             padding: 20px;
         }
-        
+
         .step-number {
             width: 40px;
             height: 40px;
@@ -158,59 +160,60 @@
             justify-content: center;
             margin: 0 auto 20px;
             font-weight: 600;
-        }        
+        }
+
         .cta-section {
             background: linear-gradient(135deg, var(--primary-color) 0%, #0d2456 100%);
             color: white;
             padding: 80px 0;
             text-align: center;
         }
-        
+
         .cta-heading {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 20px;
         }
-        
+
         footer {
             background-color: #0d2456;
             color: rgba(255, 255, 255, 0.7);
             padding: 50px 0 20px;
         }
-        
+
         .footer-logo {
             font-size: 1.6rem;
             font-weight: 700;
             color: white;
             margin-bottom: 20px;
         }
-        
+
         .footer-links h5 {
             color: white;
             font-size: 1.1rem;
             margin-bottom: 20px;
             font-weight: 600;
         }
-        
+
         .footer-links ul {
             padding: 0;
             list-style: none;
         }
-        
+
         .footer-links ul li {
             margin-bottom: 10px;
         }
-        
+
         .footer-links ul li a {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             transition: color 0.3s ease;
         }
-        
+
         .footer-links ul li a:hover {
             color: white;
         }
-        
+
         .footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 20px;
@@ -218,19 +221,20 @@
             text-align: center;
             font-size: 0.9rem;
         }
-        
+
         .social-links a {
             color: rgba(255, 255, 255, 0.7);
             margin: 0 10px;
             font-size: 1.2rem;
             transition: color 0.3s ease;
         }
-        
+
         .social-links a:hover {
             color: white;
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -447,7 +451,7 @@
                             <li><i class="fas fa-map-marker-alt me-2"></i> Jl. Raya Lenteng, Aredake, Batuan, Kec. Batuan, Kabupaten Sumenep, Jawa Timur 69451</li>
                             <li><i class="fas fa-phone me-2"></i> (0328) 6771010</li>
                             <li><i class="fas fa-envelope me-2"></i> info@sisukat.ac.id</li>
-                            <li><i class="fas fa-clock me-2"></i> Senin - Jumat, 08:00 - 16:00</li>
+                            <li><i class="fas fa-clock me-2"></i> Senin - Sabtu, 08:00 - 16:00</li>
                         </ul>
                     </div>
                 </div>
@@ -460,4 +464,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

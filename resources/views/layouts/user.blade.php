@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,27 +17,34 @@
             min-height: 100vh;
             color: white;
         }
+
         .sidebar .nav-link {
-            color: rgba(255,255,255,.75);
+            color: rgba(255, 255, 255, .75);
             padding: 1rem;
         }
+
         .sidebar .nav-link:hover {
-            color: rgba(255,255,255,1);
-            background-color: rgba(255,255,255,.1);
+            color: rgba(255, 255, 255, 1);
+            background-color: rgba(255, 255, 255, .1);
         }
+
         .sidebar .nav-link.active {
             color: white;
-            background-color: rgba(255,255,255,.2);
+            background-color: rgba(255, 255, 255, .2);
         }
+
         .sidebar .nav-link i {
             margin-right: 10px;
         }
+
         .content {
             padding: 20px;
         }
+
         .navbar-brand {
             font-weight: bold;
         }
+
         .badge-notif {
             position: absolute;
             top: 5px;
@@ -45,6 +53,7 @@
     </style>
     @yield('css')
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -52,7 +61,8 @@
             <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
                 <div class="position-sticky pt-3">
                     <div class="my-4 text-center">
-                        <h5>Sistem Surat Menyurat</h5>
+                        <i class="fas fa-envelope-open-text me-2"></i>
+                        SISUKAT
                         <p>Universitas KH.Bahaudin Mudhary Madura</p>
                     </div>
                     <hr>
@@ -118,7 +128,9 @@
                                     </span>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                                    <li><h6 class="dropdown-header">Notifikasi</h6></li>
+                                    <li>
+                                        <h6 class="dropdown-header">Notifikasi</h6>
+                                    </li>
                                     <li><a class="dropdown-item" href="#">Surat dari Fakultas telah diterima</a></li>
                                     <li><a class="dropdown-item" href="#">Surat permohonan Anda telah disetujui</a></li>
                                     <li><a class="dropdown-item" href="#">Surat keterangan mahasiswa Anda siap diambil</a></li>
@@ -129,7 +141,9 @@
                                     <i class="fas fa-user-circle"></i> {{ Auth::user()->name ?? 'Nama Pengguna' }}
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li>
                                         <form action="{{ route('logout') }}" method="POST">
                                             @csrf
@@ -156,4 +170,5 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @yield('scripts')
 </body>
+
 </html>

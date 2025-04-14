@@ -97,7 +97,7 @@
                     <a href="{{ route('admin.arsip') }}" class="nav-link {{ Request::routeIs('admin.arsip*') ? 'active' : '' }}">
                         <i class="fas fa-archive"></i> Arsip Surat
                     </a>
-                    <a href="{{ route('admin.manage') }}" class="nav-link {{ Request::routeIs('admin.manage*') ? 'active' : '' }}">
+                    <a href="{{ route('manage.index') }}" class="nav-link {{ Request::routeIs('admin.manage*') ? 'active' : '' }}">
                         <i class="fas fa-archive"></i> Manajemen Anggota
                     </a>
                     <a href="{{ route('admin.template') }}" class="nav-link {{ Request::routeIs('admin.template*') ? 'active' : '' }}">
@@ -129,21 +129,6 @@
                         <span class="d-none d-md-inline">@yield('page-title', 'Dashboard Admin')</span>
                     </div>
                     <div class="d-flex align-items-center">
-                        <div class="dropdown me-3">
-                            <button class="btn btn-sm position-relative btn-outline-secondary" type="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-bell"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    5
-                                </span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">Surat masuk baru</a>
-                                <a class="dropdown-item" href="#">Disposisi menunggu</a>
-                                <a class="dropdown-item" href="#">Permintaan surat baru</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Lihat semua notifikasi</a>
-                            </div>
-                        </div>
                         <div class="dropdown">
                             <button class="btn btn-sm d-flex align-items-center" type="button" data-bs-toggle="dropdown">
                                 <img src="{{ asset('img/user.jpg') }}" class="rounded-circle me-2" width="30">
